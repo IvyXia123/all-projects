@@ -1,0 +1,273 @@
+<style type="text/css">
+	.btn-primary{
+		box-shadow: 0 0 1px 1px #539a68;
+		background:#3ddd6f;
+		border: none;
+	}
+</style>
+<script>
+    $(function () {
+        var lock = false;
+        // 定义分页控件
+        var pagination = new PageHelper("pagination");
+        var _currentPage_lastCurrent = 1;
+        var findByPage = function (currentPage) {
+            if (lock) {
+                return;
+            }
+            _currentPage_lastCurrent = currentPage;
+            lock = true;
+            $.post("cs/findByPage.do", {
+                currentPage: currentPage,
+                pageSize: 10,
+// 				search : $("#center .row #search_text").val()
+                search: search_text
+            }, function (data) {
+                // 		alert(JSON.stringify(data.page));
+                init(data.list);
+                // 初始化分页控件：参数：(当前页，页大小，总条数，点击分页时候调用的方法)
+                pagination.init(data.pageNum, data.pageSize, data.total, findByPage);
+                lock = false;
+            });
+        };
+
+        //刷新当前页
+        var reload = function() {
+            findByPage(_currentPage_lastCurrent);
+        };
+
+        // 初始化数据
+        var init = function (rst) {
+            $("#tb>tbody").empty();
+            for (var i in rst) {
+                var cls = i % 2 == 0 ? "info" : "warning";
+                var tr = $('<tr class="' + cls + '">');
+                /*<field name="id" title="id"/>
+                 <field name="phoneNumber" title="手机号码"/>
+                 <field name="productName" title="产品名称"/>
+                 <field name="settlementCapital" title="投资金额"/>
+                 <field name="inceptionDate" title="投资起始时间"/>
+                 <field name="dueDate" title="投资到期时间"/>
+                 <field name="idNo" title="证件号码"/>
+                 <field name="userName" title="客户姓名"/>
+                 <field name="mtime" title="更新时间" pattern="yyyy-MM-dd HH:mm:ss"/>
+                 <field name="ctime" title="创建时间" pattern="yyyy-MM-dd HH:mm:ss"/>*/
+                tr.append('<td>' + rst[i].phoneNumber + '</td>');
+                tr.append('<td>' + rst[i].productName + '</td>');
+                tr.append('<td>' + rst[i].settlementCapital + '</td>');
+                tr.append('<td>' + rst[i].inceptionDate + '</td>');
+                tr.append('<td>' + rst[i].dueDate + '</td>');
+                tr.append('<td>' + rst[i].idNo + '</td>');
+                tr.append('<td>' + rst[i].userName + '</td>');
+
+				/*var td = $("<td>");
+				td.append($("<a>编辑</a>").click({
+					id : rst[i].id
+				}, function(event) {
+					editUser(event.data.id);
+				}));
+				td.append($("<a>删除</a>").click({
+					id : rst[i].id
+				}, function(event) {
+					deleteUser(event.data.id);
+				}));
+				tr.append(td);*/
+				$("#tb>tbody").append(tr);
+			}
+		};
+
+		findByPage(1);
+		$("#search").click(function() {
+			findByPage(1);
+		});
+		var search_text = "";
+		$("#search_text").change(function() {
+			search_text = $(this).val();
+		});
+
+		/**编辑用户*/
+		var editUser = function(id) {
+			alert(id);
+            window.location.href="extuser_add_edit.html";
+
+            /*$.ajax({
+                type : 'POST',
+                contentType : 'application/json',
+                url : '/ext/editById.do',
+                data : {'id' : id},
+                dataType : 'json',
+                success : function(data) {
+                    alert(data.msg);
+                },
+                error : function(data) {
+                    alert(data.msg);
+                }
+            });*/
+		};
+
+		/**删除用户*/
+		var deleteUser = function(id) {
+            var r = confirm("确定要上传该Excel文件吗？")
+            if (r == true) {
+                alert(id);
+                $.ajax({
+                    type : 'POST',
+                    contentType : 'application/json',
+                    url : '/cs/deleteById.do',
+                    data : {'id' : id},
+                    dataType : 'json',
+                    success : function(data) {
+                        alert(data.msg);
+                    },
+                    error : function(data) {
+                        alert(data.msg);
+                    }
+                });
+            } else {
+
+            }
+
+		};
+
+		/**手动添加单个用户*/
+		$('#addOneUser').click(function(){
+
+        });
+
+		/**ajax上传excel*/
+		$('#importExcel').click(function() {
+			$("#fileExcel").click();
+		});
+
+		/**选择上传文件后触发*/
+		$('#fileExcel').change(function() {
+			var r = confirm("确定要上传该Excel文件吗？")
+			if (r == true) {
+				ajaxFileUpload();
+			} else {
+				$("#fileExcel").val("");
+			}
+		});
+
+		//ajax上传文件
+		var ajaxFileUpload = function() {
+			$.ajaxFileUpload({
+				url : "/ext/upload.do", //用于文件上传的服务器端请求地址
+				type : "post",
+				secureuri : false, //一般设置为false
+				fileElementId : "fileExcel", //文件上传空间的id属性
+				dataType : "json", //返回值类型 一般设置为json
+				success : function(data, status) { //服务器成功响应处理函数
+					console.log(data);
+					/** 0:失败,1:成功,2:未登录或session过期,3:无权限 */
+					if (data.code == 0) {
+						alert(data.msg);
+					} else if (data.code == 1) {
+						var excelName = data.obj.excelName;
+						alert(excelName + " ,该文件已成功上传，" + data.msg);
+					} else {
+						alert(data.msg);
+					}
+				},
+				error : function(data, status, e) { //服务器响应失败处理函数
+					alert(data.msg + "---" + e);
+				}
+			});
+		};
+
+		/**
+		 * ajax下载excel
+		 */
+		$("#exportExcel").click(function() {
+			downLoadFile({
+				url : '/cs/export/excel.do', //请求的url
+				data : {search : search_text},//要发送的数据
+				callback : function() {
+					//alert("导出excel文件成功");
+				}
+			});
+		});
+
+		$('#addOneUser').click(function() {
+			$util.modal("新增人员", "extuser_add_edit.html", {id:111,name:"aaa"}, function() {
+				alert("这个时候关闭了。");
+			});
+		});
+
+    });
+</script>
+<div class="row" style="margin: 0;">
+    <div class="input-group has-primary" style="float: left; width: 200px;">
+        <input id="search_text" type="text" class="form-control" placeholder="Search for..."/> <span
+            class="input-group-btn">
+			<button id="search" class="btn btn-primary" type="button">搜索</button>
+		</span>
+    </div>
+    <button type="button" id="exportExcel" class="btn btn-primary" style="float: right;">导出Excel</button>
+    <button type="button" id="importExcel" class="btn btn-primary" style="float: right; margin-right: 10px;">导入Excel</button>
+    <button type="button" id="addOneUser" class="btn btn-primary" style="float: right; margin-right: 10px;">新增用户</button>
+
+<!--     <div id="myModal" class="modal fade"> -->
+<!-- 	  <div class="modal-dialog" role="document"> -->
+<!-- 	    <div class="modal-content"> -->
+<!-- 	      <div class="modal-header"> -->
+<!-- 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+<!-- 	          <span aria-hidden="true">&times;</span> -->
+<!-- 	        </button> -->
+<!-- 	        <h4 class="modal-title">Modal title</h4> -->
+<!-- 	      </div> -->
+<!-- 	      <div class="modal-body"> -->
+<!-- 	        One fine body&hellip; -->
+<!-- 	      </div> -->
+<!-- 	      <div class="modal-footer"> -->
+<!-- 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+<!-- 	        <button type="button" class="btn btn-primary">Save changes</button> -->
+<!-- 	      </div> -->
+<!-- 	    </div> -->
+<!-- 	  </div> -->
+<!-- 	</div> -->
+    <input type="file" id="fileExcel" name="fileExcel" accept=".xls,.xlsx" style="display: none"/>
+</div>
+<hr class="line-1"/>
+<!-- /.col-lg-6 -->
+<table id="tb" class="table table-hover table-condensed table-bordered"style="border: none;">
+    <thead>
+    <tr>
+        <th width="10%">手机号码</th>
+        <th width="10%">产品名称</th>
+        <th width="10%">投资金额</th>
+        <th width="10%">投资起始时间</th>
+        <th width="10%">投资到期时间</th>
+        <th width="10%">证件号码</th>
+        <th width="10%">客户姓名</th>
+        <!--<th width="10%">操作</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<ul id="pagination" class="pagination" style="cursor:pointer"></ul>
+<!--
+	<ul id="pagination" class="pagination" style="cursor:pointer">
+		<li><a href="#" aria-label="Previous"> <span aria-hidden="true">首页</span>
+		</a></li>
+		<li><a href="#" aria-label="Previous"> <span aria-hidden="true">上一页</span>
+		</a></li>
+		<li class="active"><a href="#">1</a></li>
+		<li><a href="#">2</a></li>
+		<li><a href="#">3</a></li>
+		<li><a href="#">4</a></li>
+		<li><a href="#">5</a></li>
+		<li><a href="#" aria-label="Next"> <span aria-hidden="true">下一页</span>
+		</a></li>
+		<li><a href="#" aria-label="Previous"> <span aria-hidden="true">尾页</span>
+		</a></li>
+		<li><span aria-hidden="true">
+		每页
+			<select>
+				<option>10</option>
+				<option>20</option>
+				<option>50</option>
+				<option>100</option>
+			</select>
+-->              

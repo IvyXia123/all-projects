@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--<link rel="stylesheet" type="text/css" href="css/index.css"/>-->
+		<style type="text/css">
+			.tooltip{
+				position: fixed;
+			    width: 100%;
+			    height: 100%;
+			    top: 0;
+			    left: 0;
+			    visibility: hidden;
+			    background-color: rgba(0,0,0,0.4);
+			    z-index:9999;
+			}	
+			.tooltip img{
+				position:absolute;
+				top:0;
+				bottom:0;
+				left: 0;
+				right: 0;
+				margin: auto;
+			}
+			.prompt-box{
+				width:414px;
+				height: 240px;
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				margin:auto; 
+				background-color:rgba(0,0,0,0);
+			}
+			.prompt-box p{
+				text-align: center;
+				color:#cd780a;
+				font-size: 36px;
+				font-weight:bold;
+				margin: auto;
+				}
+			.prompt-box p i{font-style: inherit;color: red;}
+			.prompt{margin-top:100px;}
+				@font-face{
+						font-family: myFirstFont;
+						src: url('font/SIMLI.TTF');
+					}
+				.prompt-box p,.prompt-box p i{
+					font-family:myFirstFont;
+				}
+		</style>
+	</head>
+	<body>
+		<div class="tooltip" style="visibility: inherit;">
+			<img src="image/skin/tooltip.png" width="500"/>
+			<div class="prompt-box">
+				<div class="prompt">
+					<p>感谢安徽刘先生</p>
+					<p>投资<i>200</i>万</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

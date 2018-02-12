@@ -1,0 +1,85 @@
+.compileA,.removeA{
+	padding-left: 21px;
+	box-sizing: border-box;
+	background-size: 32% 98%;
+	margin-left: 20px;
+	background-repeat: no-repeat;
+	background-position:center left; 
+}
+.compileA{	
+	background: url(./images/edit.png);
+}
+.removeA{
+	background: url(./images/delete.png);
+}
+/*  add edit
+ * -------------*/
+.modal-header{
+	padding: 10px 15px;
+}
+.modal-title{
+	font-size: 20px;
+	color: #3c4f62;
+	font-weight: 600;
+}
+.close{
+	position: absolute;
+	width: 42px;
+	height: 45px;
+	top: 0;
+	right:0;
+	transition: all 0.5s;
+	font-size: 30px;
+}
+.close:hover{
+	color: #12d950;
+	transform: rotateZ(360deg);
+}
+.input-group{
+	width: 100%;
+	padding: 5px;
+	
+}
+.input-group-addon{
+	text-align: right;
+	width: 30%;
+	background-color: transparent;
+	border: none;
+	font-size: 14px;
+	color: #666;
+	font-weight: 600;
+}
+.modal-dialog .form-control{
+	width: 70% !important;
+	border: none;
+	border-bottom: 1px solid #c0d0dd;
+	font-weight: 600;	
+	box-shadow: 0 2px 1px 1px #e8e8e8;
+    border-radius: 4px !important;	
+}
+.input-group .radio-inline{
+	margin-left: -10px;
+}
+.modal-footer .btn{
+	padding: 6px 30px;
+}
+.modal-footer .btn-primary{
+	background-color: #12d950;
+}
+#da {
+	/*width: 285px !important;*/
+	height: 315px !important;
+	z-index: 10000 !important;
+}
+
+#da ol{
+	padding: 0;
+	width:100%;
+}
+#da li{
+	width: 40px;
+	list-style: none;
+}
+#da .calendar ol li{
+	float: left;
+}

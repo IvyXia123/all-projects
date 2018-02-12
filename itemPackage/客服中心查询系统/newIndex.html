@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<title>客服中心信息查询系统</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-theme.css" rel="stylesheet">
+<style>
+.bian {
+	background-image: -moz-linear-gradient(top, #BDBD3A, #fff); /* Firefox */
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFF0), color-stop(1, #fff)); /* Saf4+, Chrome */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFF0', endColorstr='#fff', GradientType='0'); /* IE*/
+}
+html,body{
+	width: 100%;
+	height: 100%;
+	background-color: #f1f5f8;
+	overflow: hidden;
+}
+.header,.container,.footer{
+	width: 100%;
+}
+/* header
+ -----------------------*/
+.header{	
+	height: 50px !important;
+}
+.navbar-brand{
+	position: absolute;
+	z-index: 1002;
+	color: white;
+	background-color: #7266ba;
+ 	height: 42px;
+ 	line-height: 0px;
+ 	padding: 28px 47px;
+    box-shadow: 0px 3px 6px 1px #999;
+}
+.navbar-brand:before{
+	display: none;
+	content: "";
+	border: 13px solid transparent;
+	border-top: 8px solid red;
+	position: absolute;
+	top: 42px;
+	left: 209px;
+}
+.header .navbar-collapse,.header .navbar-collapse a{
+	background: none;
+}
+#ulnavbar {
+	padding-top:12px;
+}
+#ulnavbar a{
+	background: none;
+	padding: 0 20px;
+}
+#ulnavbar li:first-child a{
+	border-right: 1px solid white;
+}
+/* container 
+ -----------------------*/
+.container{
+	width: 100%;
+	height: 91%;
+	padding: 0;
+	clear: both;
+}
+.container_aside,.container_article{
+	float: left;
+}
+/* container aside
+---- -----------*/
+.container_aside{
+	height: 100%;	
+	width: 14%;
+	position: relative;
+	padding-top: 15px;
+	background-color: #1c2b36 ;
+}
+.aside_nav{
+	width: 100%;
+	height:100%;
+	overflow: hidden;
+}
+.aside_nav ul{
+	margin: 0;
+	padding: 0;
+	width: 110%;
+	height: 100%;
+	overflow: auto;
+}
+.aside_nav li{
+	width: 91%;
+	border-left: 10px solid #3c4f62 ;
+	box-sizing: border-box;
+	padding-right: 10px;
+}
+.aside_nav a{
+	display: block;
+	text-align: center;
+	width: 100%;
+	padding-top: 13px;
+	padding-bottom: 13px;
+	color: #a7b1c2;
+	font-size: 15px;
+	border-bottom: 1px solid #253847;
+	text-decoration: none;	
+}
+.aside_nav li:hover{
+	background-color: #478de4;
+	border-left: 5px solid black;
+	padding: 0;
+}
+.aside_nav .selectLi{
+	background-color: #354b5e;
+	border-left: 5px solid black;
+	padding: 0;
+} 
+.aside_nav .selectLi a{
+	color: #fff;
+}
+/* container article
+ ---------------------*/
+.container_article{
+	width: 86%;
+	height: 100%;
+	background-color: #f1f5f8;
+	overflow: hidden;
+}
+.container_article .panel-primary{
+	width: 98%;
+	height: 98%;
+	padding: 0;
+	margin: 1%;
+	box-shadow: 0 0 10px 1px #ccc;
+	border: none;
+}
+#center{
+	width: 100%;
+}
+#center tr{
+	border: none;
+}
+#center th{
+	background-color: #f3f5f6;
+	border: none;
+	text-align: center;
+	color: #68829c;
+}
+/*  footer
+ ---------------------*/
+.footer{
+	height: 3% !important;
+	background-color:#3c4f62 !important;
+}
+
+</style>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/pagehelper.js"></script>
+<script src="js/jquery.ajaxfileupload.js"></script>
+<script src="js/base.js"></script>
+<script src="js/commons.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/userservice.js"></script>
+<script>
+	window.onload = function() {
+		var width = $(window).width();
+		var height = $(window).height();
+		$("#center").height(height - $("#north").height() - $("#south").height() - 103 - 32);
+		var init = function() {
+			var body = $('body');
+			var link_ul = $('#ulnavbar2');
+			//
+			var link_li_1 = $('<li onclick="switchStyle(this)"><a href="javascript:void(0);">客户信息</a></li>');
+			link_li_1.click(function() {
+				setSrc(this, 'extuser.html');
+			});
+			link_ul.append(link_li_1);
+
+			/*var link_li_2 = $('<li><a href="javascript:void(0);">平台待分配客户</a></li>');
+			link_li_2.click(function() {
+				setSrc(this, 'page2.html');
+			});
+			link_ul.append(link_li_2);
+			var link_li_3 = $('<li><a href="javascript:void(0);">正式客户</a></li>');
+			link_li_3.click(function() {
+				setSrc(this, 'page3.html');
+			});
+			link_ul.append(link_li_3);*/
+
+			link_li_1.click();
+		};
+		var setSrc = function(obj, src) {
+			$("#center_head").text($(obj).text());
+			$("#ulnavbar .active").removeClass();
+			$(obj).addClass("active");
+			if (!$('#headBtn').hasClass('collapsed')) {
+				$('#headBtn').click();
+			}
+			if ($("#center").attr("src") == src) {
+				return;
+			}
+			$("#center").attr("src", src);
+			htmlobj = $.ajax({
+				url : src,
+				async : false
+			});
+			$("#center").html(htmlobj.responseText);
+		};
+		init();
+	};
+	$(function(){
+		containerHeight();
+	})
+	$(window).resize(containerHeight);
+	function containerHeight(){
+		$('.container').css('height',$('body').outerHeight()-($('.header').outerHeight()+$('.footer').outerHeight()));
+	}
+	function switchStyle(e){
+		$(e).addClass('selectLi').siblings('li').removeClass('selectLi');
+	}
+</script>
+</head>
+<body>	
+	<a class="navbar-brand" href="javascript:void(0);"style="color: white !important;">客服数据查询系统</a>
+	<header id="north"class="header"  style="height: 50px;">
+		<nav class="navbar navbar-custom navbar-static-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button id="headBtn" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>					
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<!--<ul id="ulnavbar" class="nav navbar-nav"></ul>-->
+					<ul id="ulnavbar" class="nav navbar-nav navbar-right">
+						<li><a href="javascript:void(0);" onclick=""><script>document.write($userservice.userName);</script></a></li>
+						<li><a href="javascript:void(0);" onclick="$userservice.logout();">登出</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<section class="container">
+		<aside class="container_aside">
+			<nav class="aside_nav">
+				<ul id="ulnavbar2">
+				</ul>
+			</nav>			
+		</aside>
+		<article class="container_article">
+			<section class="panel panel-primary panel-border">
+				<div class="panel-body" style="height: 100%;box-sizing: border-box;" id="center" ></div>
+			</section>
+		</article>
+	</section>		
+	<!--<footer id="south" class="footer" style="height: 20px; text-align: center; color: #fff; background-color: #337ab7;">@copy 2016 evergrande group</footer>
+--></body>
+</html>

@@ -1,0 +1,110 @@
+/* 样式 */
+
+th, td {
+	white-space: nowrap;
+	text-align: right;
+}
+
+div.dataTables_wrapper {
+	margin: 0 auto;
+}
+
+div.top_container {
+	width: 100%;
+	display: table
+}
+
+div.top_left, div.top_mid, div.top_right {
+	display: table-cell;
+}
+
+div.top_mid {
+	width: 100%;
+}
+
+div.top_left, div.top_right {
+	padding-left: 15px;
+	padding-right: 15px;
+	white-space: nowrap;
+}
+
+/* 字体颜色 */
+
+/* 表格颜色 */
+
+td.gray {
+	color: #777;
+}
+
+th.gray {
+	color: #777;
+}
+
+td.green {
+	color: #388E8E;
+}
+
+td.red {
+	font-weight: bold;
+	color: #CD0000;
+}
+
+td.shine {
+	font-weight: bold;
+	color: #CDAD00;
+}
+
+td.total {
+	color: #CDAF95;
+}
+
+tr.total {
+	font-weight: bold;
+	color: #CDAF95;
+}
+
+.icon-arrow-up:before {
+    content: "\f062";
+}
+
+/* 定义keyframe动画，命名为blink */
+
+@keyframes blink{
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* 添加兼容性前缀 */
+
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@-moz-keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@-ms-keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@-o-keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* 定义blink类*/
+.blink{
+    animation: blink .48s linear infinite;
+    /* 其它浏览器兼容性前缀 */
+    -webkit-animation: blink .48s linear infinite;
+    -moz-animation: blink .48s linear infinite;
+    -ms-animation: blink .48s linear infinite;
+    -o-animation: blink .48s linear infinite;
+    /* color: #dd4814; */
+}
+
+
